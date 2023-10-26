@@ -1,0 +1,73 @@
+import art
+import os 
+import random
+end_of_game = False
+user_hand = []
+comp_hand = []
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+
+def deal_card():
+    card = random.choice(cards)
+    return card
+def calculate_score(x):
+    score = sum(x)
+    if score == 21:
+        return 0
+    elif 11 in x and score > 21:
+        score -= 10
+        return score
+    else:
+        return score
+def compare(user,comp):
+    if user_score > 21:
+        print("You Busted!")
+    elif user == comp:
+        print("It's a tie!")
+    elif user_score == 0:
+        print("You win!") 
+    elif comp == 0:
+        print("Computer wins.")
+    elif comp > 21:
+        print("Computer is busted. You win.")
+    elif user > comp:
+        print("You win.")
+    elif user < comp:
+        print("You lose.")
+
+while not end_of_game:
+    game = input("Would you like to play a game of blackjack? Type 'n' or 'y': ")
+    if game == "y":
+        user_hand = []
+        comp_hand = []
+        another_card = True
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(art.logo)
+        user_hand.append(deal_card())
+        user_hand.append(deal_card())
+        comp_hand.append(deal_card())
+        user_score = calculate_score(user_hand)
+        comp_score = calculate_score(comp_hand)
+        print(f"Your cards are: {user_hand}, and your current score is: {user_score}\nComputer's first card is: {comp_hand}")
+        if user_score == 0:
+            print("You win!")
+        else:
+            while another_card == True:
+                draw_again = input("Type 'y' to get another card, type 'n' to pass: ")
+                if draw_again == "y":
+                    user_hand.append(deal_card())
+                    user_score = calculate_score(user_hand)
+                    if user_score == 0 or user_score > 21:
+                        another_card = False
+                    else: 
+                        print(f"Your cards are: {user_hand}, and your current score is: {user_score}\nComputer's first card is: {comp_hand}")
+                elif draw_again == "n":
+                    another_card = False
+            while comp_score < 17 and comp_score != 0:        
+                if comp_score < 17 and comp_score > 0:
+                    comp_hand.append(deal_card())
+                    comp_score = calculate_score(comp_hand)
+                    print(comp_score)
+            print(f"Your cards are: {user_hand}, and your final score is: {user_score}\nComputer's final cards are: {comp_hand}, and its final score is : {comp_score}")
+            compare(user_score,comp_score)
+    elif game == "n":
+        end_of_game = True
